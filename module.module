@@ -1,0 +1,257 @@
+<?php
+
+
+
+
+
+function module_init(){
+
+}
+
+
+
+ function module_menu() {
+
+	$items['admin/module'] = array(
+		        'title' => t('module'),
+		        'description' =>t('module website custom configurations'),
+		        'page callback' => 'drupal_get_form',
+		        'page arguments' => array('module_configs_page'),
+		        'access arguments' => array('config module website'),
+		        'type' => MENU_NORMAL_ITEM,
+		    );
+
+
+
+
+
+	return $items;
+}
+
+
+
+/**
+mplements Hook Permitions
+*/
+
+function module_permission() {
+	return array(
+		    'config module website' => array(
+		      'title' => t('Config module website'),
+		      'description' => t('Alow to access to custom config page.'),
+		    ),
+		  );
+}
+
+
+
+/**
+Implements hook_block().
+ */
+ function module_block_info() {
+	$blocks['module_signup'] = array(
+		    'info' => t('Sign Up'),
+		  );
+	return $blocks;
+}
+
+
+
+/**
+lock View
+*/
+  function module_block_view($delta = '') {
+
+	$block = array();
+
+	switch ($delta) {
+		case 'module_signup':
+				      $block['subject'] = t('Sign Up');
+		$block['content'] = array(
+				        '#theme' => 'signup',
+				        '#title' => t('Sign Up'),
+				      );
+		break;
+	}
+	return $block;
+}
+
+
+
+
+/**
+Implements hook_theme().
+   */
+  function module_theme() {
+	$theme = array();
+	$theme['module_tpl'] = array(
+		      'template' => 'mytpl',
+		      'path' => drupal_get_path('module', 'module') . '/tpl',
+		    );
+
+
+	return $theme;
+}
+
+
+
+
+
+/**
+Return configuration page
+   *
+   * @return array
+   */
+  function module_configs_page()
+  {
+	$form = array();
+	$form['module_horus_url'] = array(
+		          '#type'             => 'textfield',
+		          '#title'            => 'Horus Endpoint URL',
+		         '#description'       => t('The node or app with the weather details for a location'),
+		         '#default_value' => variable_get('module_horus_url', 'http://horus.dev.konabackend.com/'),
+		          '#required'         => true,
+		      );
+	$form['module_horus_api_key'] = array(
+		        '#type'             => 'textfield',
+		        '#title'            => 'Horus API Key',
+		        '#default_value' => variable_get('module_horus_api_key', 'Your API Key'),
+		        '#required'         => true,
+		    );
+
+	$form['module_horus_touchpointToken'] = array(
+		      '#type'             => 'textfield',
+		      '#title'            => 'Horus touchpointToken',
+		      '#default_value' => variable_get('module_horus_touchpointToken', 'Your Touchpoint Token'),
+		      '#required'         => true,
+		  );
+
+	$form['module_horus_debugmode'] = array(
+		      '#type'             => 'select',
+		      '#title'            => 'Horus Log Responses',
+		      '#options' => array(
+		          FALSE   => t('No'),
+		          TRUE    => t('Yes'),
+		       ),
+		      '#default_value' => variable_get('module_horus_debugmode', FALSE),
+
+	'#required'         => true,
+		  );
+
+
+
+	$form['module_activate_age_verification'] = array(
+		    '#type'             => 'select',
+		    '#title'            => 'Activate Age Verification',
+		    '#options' => array(
+		        FALSE   => t('No'),
+		        TRUE    => t('Yes'),
+		     ),
+		    '#default_value' => variable_get('module_activate_age_verification', FALSE),
+
+	'#required'         => true,
+		);
+	$form['module_age_verification_age'] = array(
+		  '#type'             => 'select',
+		  '#title'            => 'Min Age Verification',
+		  '#options' => array(
+		      18   => 18,
+		      19   => 19,
+		      20   => 20,
+		      21   => 21,
+		   ),
+		  '#default_value' => variable_get('module_age_verification_age', 18),
+
+	'#required'         => true,
+		);
+
+
+	$form['module_fieldnotes_url'] = array(
+		    '#type'             => 'textfield',
+		    '#title'            => 'Field Notes URL',
+		    '#default_value' => variable_get('module_fieldnotes_url', 'field-notes'),
+		    '#required'         => true,
+		);
+
+	$form['module_terms_url'] = array(
+		  '#type'             => 'textfield',
+		  '#title'            => 'Terms and Conditions URL',
+		  '#default_value' => variable_get('module_terms_url', 'node/3'),
+		  '#required'         => true,
+		);
+
+	$form['module_enjoy_responsably_url'] = array(
+		  '#type'             => 'textfield',
+		  '#title'            => 'No valid age redirect URL',
+		  '#default_value' => variable_get('module_enjoy_responsably_url', 'http://responsibility.org/'),
+		  '#required'         => true,
+		);
+
+
+	$form['module_privacy_url'] = array(
+		  '#type'             => 'textfield',
+		  '#title'            => 'Privacy Policy URL',
+		  '#default_value' => variable_get('module_privacy_url', 'node/4'),
+		  '#required'         => true,
+		);
+
+	$form['module_cocktail_title'] = array(
+		  '#type'             => 'textfield',
+		  '#title'            => 'Cocktail List Custom Title',
+		  '#default_value' => variable_get('module_cocktail_title', 'Olmeca module Tequila Drinks'),
+		  '#required'         => true,
+		);
+	$form['module_cocktail_subtitle'] = array(
+		  '#type'             => 'textarea',
+		  '#title'            => 'Cocktail List Custom Sub-Title',
+		  '#default_value' => variable_get('module_cocktail_subtitle', 'Bring home a taste of Jalisco with this collection of handcrafted tequila cocktails from some of our favorite bartenders.'),
+		  '#required'         => true,
+		);
+
+	$form['module_global_sharing_description'] = array(
+		  '#type'             => 'textarea',
+		  '#title'            => 'Description line for sharing in twitter or facebook',
+		  '#default_value' => variable_get('module_global_sharing_description', 'Visit module Tequila'),
+		  '#required'         => false,
+		);
+	$form['module_global_sharing_image'] = array(
+		  '#type'             => 'textfield',
+		  '#title'            => 'Image URL for sharing in twitter or facebook',
+		  '#default_value' => variable_get('module_global_sharing_image', 'https://www.moduletequila.com/sites/all/themes/module/assets/images/avp_bg-999faba66a.jpg'),
+		  '#required'         => false,
+		);
+
+
+	$form['module_home_meta_description'] = array(
+		        '#type'             => 'textfield',
+		        '#title'            => 'Description for home and general pages',
+		        '#default_value' => variable_get('module_home_meta_description', 'Olmeca module Tequila.'),
+		        '#required'         => true,
+		    );
+	$form['module_process_meta_description'] = array(
+		        '#type'             => 'textfield',
+		        '#title'            => 'Description for Process',
+		        '#default_value' => variable_get('module_process_meta_description', 'This is how we play the field.'),
+		        '#required'         => true,
+		    );
+
+	$form['module_cocktails_meta_description'] = array(
+		        '#type'             => 'textfield',
+		        '#title'            => 'Description Coctails Section',
+		        '#default_value' => variable_get('module_cocktails_meta_description', 'Bring home a taste of Jalisco with this collection of handcrafted tequila cocktails from some of our favorite bartenders.'),
+		        '#required'         => true,
+		    );
+	$form['module_fieldnotes_meta_description'] = array(
+		        '#type'             => 'textfield',
+		        '#title'            => 'Description for Field Notes section',
+		        '#default_value' => variable_get('module_fieldnotes_meta_description', 'Did Up Stories Told by Tequila Lovers.'),
+		        '#required'         => true,
+		    );
+
+
+	return system_settings_form($form);
+}
+
+
+
+

@@ -1,0 +1,5 @@
+name = Nombre del modulo
+description = Description.
+package = Paquete
+core = 7.x
+
